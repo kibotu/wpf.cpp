@@ -4,7 +4,7 @@
 #endif // RATIONALNUMBER_H
 
 /**
- * @brief Represents a rational number.
+ * Represents a rational number.
  *
  * Numerator
  * ---------
@@ -13,21 +13,84 @@
 struct RationalNumber {
 
     /**
-     * @brief Zähler
+     * Zähler
      */
     int numerator;
 
     /**
-     * @brief Nenner
+     * Nenner
      */
     int denominator;
 };
 
 /**
- * @brief Validates a RationalNumber against division by zero.
+ * Validates a RationalNumber against division by zero.
  * (Ignores integer overflow)
  *
  * @param n - RationalNumber to be validated.
  * @return true if is valid.
  */
 bool rnIsValid(RationalNumber n);
+
+/**
+ * Compares two RationalNumbers in terms of equality. Checks against division by zero and signs.
+ *
+ * @param a - First RationalNumber.
+ * @param b - Second RationalNumber.
+ * @return true if both have are equal.
+ */
+bool rnEqual(RationalNumber a, RationalNumber b);
+
+/**
+ * Checks if first RationalNumber is smaller than the second. Checks against divison by zero and signs.
+ *
+ * @param a - First Rational Number.
+ * @param b - Second RationalNumber.
+ * @return true if first is smaller than the second.
+ */
+bool rnLessThan(RationalNumber a, RationalNumber b);
+
+/**
+ * Adds two RationalNumbers.
+ *
+ * @param a - First Rational Number.
+ * @param b - Second RationalNumber.
+ * @return result as new RationalNumber.
+ */
+RationalNumber rnAdd(RationalNumber a, RationalNumber b);
+
+/**
+ * Subtracts two RationalNumbers.
+ *
+ * @param a - First Rational Number.
+ * @param b - Second RationalNumber.
+ * @return result as new RationalNumber.
+ */
+RationalNumber rnSubtract(RationalNumber a, RationalNumber b);
+
+/**
+ * Multiplies two RationalNumbers.
+ *
+ * @param a - First Rational Number.
+ * @param b - Second RationalNumber.
+ * @return result as new RationalNumber.
+ */
+RationalNumber rnMultiply(RationalNumber a, RationalNumber b);
+
+/**
+ * Divides two RationalNumbers.
+ *
+ * @param a - First Rational Number.
+ * @param b - Second RationalNumber.
+ * @return result as new RationalNumber.
+ */
+RationalNumber rnDivide(RationalNumber a, RationalNumber b);
+
+/**
+ * Normalizes RationalNumber.
+ *
+ * @param a - RationalNumber to be normalized.
+ */
+bool normalize(RationalNumber a);
+
+
