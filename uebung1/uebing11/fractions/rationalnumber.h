@@ -1,0 +1,4 @@
+#ifndef RATIONALNUMBER_H
+#define RATIONALNUMBER_H
+
+#endif // RATIONALNUMBER_H
