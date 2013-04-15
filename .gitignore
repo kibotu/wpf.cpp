@@ -1,3 +1,5 @@
+# C++ .gitignore (src: https://github.com/github/gitignore/blob/master/C%2B%2B.gitignore)
+
 # Compiled Object files
 *.slo
 *.lo
@@ -12,8 +14,52 @@
 *.la
 *.a
 
-# qt user 
+# C .gitignore (src: https://github.com/github/gitignore/blob/master/C.gitignore)
+
+# Object files
+*.o
+
+# Libraries
+*.lib
+*.a
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Qt .gitignore (src: https://github.com/github/gitignore/blob/master/Qt.gitignore)
+
+# C++ objects and libs
+
+*.slo
+*.lo
+*.o
+*.a
+*.la
+*.lai
+*.so
+*.dll
+*.dylib
+
+# Qt-es
+
 *.pro.user
+*.pro.user.*
+moc_*.cpp
+qrc_*.cpp
+Makefile
+*-build-*
+
+
+# Qt custom unwanted
+*.autosave
 
 # qt debug release folders
 HelloC4J-build-Desktop_Qt_5_0_1_MinGW_32bit-Debug/
