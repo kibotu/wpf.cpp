@@ -12,6 +12,9 @@
 *.la
 *.a
 
+# qt user 
+*.pro.user
+
 # qt debug release folders
 HelloC4J-build-Desktop_Qt_5_0_1_MinGW_32bit-Debug/
 fractions-build-Desktop_Qt_5_0_1_MinGW_32bit-Debug/
