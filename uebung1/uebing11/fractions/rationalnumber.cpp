@@ -26,7 +26,7 @@ RationalNumber rnAdd(RationalNumber a, RationalNumber b){
     int d = a.denominator*b.denominator;
     int gcd = getGCDIterative(n,d);
     RationalNumber result = {n/gcd,d/gcd};
-    return result;
+    return normalized(result);
 }
 
 RationalNumber rnSubtract(RationalNumber a, RationalNumber b) {
@@ -35,7 +35,7 @@ RationalNumber rnSubtract(RationalNumber a, RationalNumber b) {
     int d = a.denominator*b.denominator;
     int gcd = getGCDIterative(n,d);
     RationalNumber result = {n/gcd,d/gcd};
-    return result;
+    return normalized(result);
 }
 
 RationalNumber rnMultiply(RationalNumber a, RationalNumber b) {
@@ -44,7 +44,7 @@ RationalNumber rnMultiply(RationalNumber a, RationalNumber b) {
     int d = a.denominator*b.denominator;
     int gcd = getGCDIterative(n,d);
     RationalNumber result = {n/gcd,d/gcd};
-    return result;
+    return normalized(result);
 }
 
 RationalNumber rnDivide(RationalNumber a, RationalNumber b) {
@@ -53,7 +53,7 @@ RationalNumber rnDivide(RationalNumber a, RationalNumber b) {
     int d = a.denominator*b.numerator;
     int gcd = getGCDIterative(n,d);
     RationalNumber result = {n/gcd,d/gcd};
-    return result;
+    return normalized(result);
 }
 
 RationalNumber normalize(RationalNumber a) {
