@@ -20,34 +20,6 @@ bool rnLessThan(RationalNumber a, RationalNumber b) {
     return true;
 }
 
-bool greaterOrEqualPositiveFraction(int a,int b,int c,int d)
-{
-  if (b == 0) return true;
-  if (d == 0) return false;
-  if (a/b > c/d) return true;
-  if (a/b < c/d) return false;
-  return !greaterFraction(b,a%b,d,c%d);
-}
-
-bool greaterPositiveFraction(int a,int b,int c,int d)
-{
-  if (d == 0) return false;
-  if (b == 0) return true;
-  if (a/b > c/d) return true;
-  if (a/b < c/d) return false;
-  return !greaterPositiveFraction(b,a%b,d,c%d);
-}
-
-bool greaterFraction(int a,int b,int c,int d)
-{
-  if (b<0) { b = -b; a = -a; }
-  if (d<0) { d = -d; c = -c; }
-  if (a<0 && c<0) return greaterPositiveFraction(-c,d,-a,b);
-  if (a<0) return false;
-  if (c<0) return true;
-  return greaterPositiveFraction(a,b,c,d);
-}
-
 RationalNumber rnAdd(RationalNumber a, RationalNumber b){
     assert(rnIsValid(a) && rnIsValid(b));
     int n = a.numerator*b.denominator+b.numerator*a.denominator;
