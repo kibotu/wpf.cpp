@@ -91,6 +91,35 @@ RationalNumber rnDivide(RationalNumber a, RationalNumber b);
  *
  * @param a - RationalNumber to be normalized.
  */
-bool normalize(RationalNumber a);
+RationalNumber normalize(RationalNumber a);
 
+/**
+ * Computes greatest common divisor. (Iterative approach)
+ *
+ * @param a - Rational Number.
+ * @return greatest common divisor.
+ */
+int getGCDIterative(RationalNumber a);
 
+int getGCDIterative(int a, int b);
+
+/**
+ * Computes greatest common divisor. (Recursive approach)
+ *
+ * @param a - Rational Number.
+ * @return greatest common divisor.
+ */
+int getGCDRecursive(RationalNumber number);
+
+int getGCDRecursive(int a, int b);
+
+/**
+ * Computes least common multiple.
+ *
+ * @param a - Denominator.
+ * @param b - Numerator.
+ * @return
+ */
+int getLeastCommonMultiple(int a, int b);
+
+int leastCommonMultiple(int a, int b);
