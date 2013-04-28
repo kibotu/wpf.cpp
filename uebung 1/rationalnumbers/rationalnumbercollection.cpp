@@ -52,11 +52,11 @@ void rncDelete(RationalNumberCollection** rnc) {
     *rnc = NULL;
 }
 
-void rncResize(RationalNumberCollection* rnc, const unsigned int capacity){
+void rncResize(RationalNumberCollection* rnc, const unsigned int newCapacity){
     if(!rnc) return;
-    RationalNumber* newNrs = (RationalNumber*) realloc(rnc->data, sizeof(RationalNumber)*capacity);
+    RationalNumber* newNrs = (RationalNumber*) realloc(rnc->data, sizeof(RationalNumber)*newCapacity);
     rnc->data = newNrs;
-    rnc->capacity = capacity;
+    rnc->capacity = newCapacity;
 }
 
 unsigned int rncSize(const RationalNumberCollection* rnc){

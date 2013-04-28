@@ -111,6 +111,11 @@ RationalNumber rnMultiply(RationalNumber, RationalNumber);
  */
 RationalNumber rnDivide(RationalNumber divident, RationalNumber divisor);
 
+/**
+ * Prints RationalNumber on the console.
+ *
+ * @param n - RationalNumber.
+ */
 void rnPrint(RationalNumber n);
 
 #endif // RATIONALNUMBER_H
