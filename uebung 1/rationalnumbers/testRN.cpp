@@ -7,7 +7,6 @@
 
 #include "rationalnumber.h"
 
-
 int main()
 {
 
