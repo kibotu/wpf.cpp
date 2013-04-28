@@ -6,7 +6,7 @@
 #include <assert.h>
 
 #include "rationalnumber.h"
-
+#include "testRNCollection.h"
 
 int main()
 {
@@ -41,7 +41,9 @@ int main()
     assert( rnEqual(t2, t3) );
     assert( !rnIsValid(t4) );
 
-    printf(" successful!\n");
+    printf("successful!\n\n");
+
+    runCollectionTests();
 
     return 0;
 }
