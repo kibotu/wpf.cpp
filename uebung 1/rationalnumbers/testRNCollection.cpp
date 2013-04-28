@@ -8,7 +8,10 @@ void runCollectionTests(){
     fflush(stdout);
 
     const unsigned int rncCap = 20;
-    RationalNumberCollection* rnc = rncInit(rncCap);
+    RationalNumberCollection* rnc = rncCreate(rncCap);
+
+    // printf("%d",rnc->size); not working due hidden implementation
+
     assert(rnc);
     assert(rncSize(rnc) == 0);
     assert(rncCapacity(rnc) == rncCap);
@@ -45,7 +48,7 @@ void runCollectionTests(){
     assert(rncCount(rnc,&rn4) == 1);
     rncAdd(rnc, &rn4);
     assert(rncCount(rnc,&rn4) == 2);
-    assert(rncTotalUniqueCount(rnc) == 3 && rnc->size == 4);
+    assert(rncTotalUniqueCount(rnc) == 3  && rncSize(rnc) == 4);
 
     printf("successful!\n\n");
 }

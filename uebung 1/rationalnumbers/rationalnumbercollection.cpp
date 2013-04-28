@@ -7,6 +7,12 @@
 #include "rationalnumber.h"
 #include "rationalnumbercollection.h"
 
+struct RationalNumberCollection {
+    unsigned int capacity;
+    unsigned int size;
+    RationalNumber* data;
+};
+
 inline bool isValidIndex(const RationalNumberCollection* rnc, const unsigned int i) {
     return rnc && i < rnc->size;
 }
@@ -24,15 +30,26 @@ bool rncEnsureCapacity(RationalNumberCollection* rnc, const unsigned int capacit
     return rnc->capacity >= capacity;
 }
 
-RationalNumberCollection* rncInit(unsigned int capacity){
-    if (capacity > RNC_MAX_SIZE) capacity = RNC_MAX_SIZE;
-    RationalNumberCollection* rnc = (RationalNumberCollection*) malloc(sizeof(RationalNumberCollection));
-    if (!rnc) return NULL;
+void rncInit(RationalNumberCollection* rnc){
     rnc->size = 0;
     rnc->capacity = 0;
     rnc->data = NULL;
+}
+
+RationalNumberCollection* rncCreate(unsigned int capacity){
+    if (capacity > RNC_MAX_SIZE) capacity = RNC_MAX_SIZE;
+    RationalNumberCollection* rnc = (RationalNumberCollection*) malloc(sizeof(RationalNumberCollection));
+    if (!rnc) return NULL;
+    rncInit(rnc);
     rncResize(rnc, capacity);
     return rnc;
+}
+
+void rncDelete(RationalNumberCollection** rnc) {
+    if(!rnc || !*rnc) return;
+    free((*rnc)->data);
+    free(*rnc);
+    *rnc = NULL;
 }
 
 void rncResize(RationalNumberCollection* rnc, const unsigned int capacity){

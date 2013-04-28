@@ -6,17 +6,15 @@
 
 const unsigned int RNC_MAX_SIZE = UINT_MAX >> (sizeof(RationalNumber) - 1);
 
-struct RationalNumberCollection {
-    unsigned int capacity;
-    unsigned int size;
-    RationalNumber* data;
-};
+struct RationalNumberCollection;
 
-RationalNumberCollection* rncInit(const unsigned int capacity = 10u);
+RationalNumberCollection* rncCreate(const unsigned int capacity = 10u);
+
+void rncDelete(RationalNumberCollection** rnc);
 
 void rncAdd(RationalNumberCollection* rnc, const RationalNumber* rn);
 
-void rncRemove();
+void rncRemove(RationalNumberCollection* rnc, const unsigned int startIndex, const unsigned int endIndex);
 
 RationalNumber rncSum(RationalNumberCollection* rnc);
 
@@ -37,8 +35,6 @@ unsigned int rncCapacity(const RationalNumberCollection* rnc);
 void rncSet(RationalNumberCollection* rnc, const unsigned int index, const RationalNumber* rn);
 
 RationalNumber* rncGet(RationalNumberCollection* rnc, const unsigned int index);
-
-void rncRemove(RationalNumberCollection* rnc, const unsigned int startIndex, const unsigned int endIndex);
 
 void rncPrint(RationalNumberCollection* rnc);
 
