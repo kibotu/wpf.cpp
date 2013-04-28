@@ -2,6 +2,7 @@
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "rationalnumber.h"
 #include "rationalnumbercollection.h"
@@ -77,4 +78,38 @@ void rncRemove(RationalNumberCollection* rnc, const unsigned int startIndex, con
 
 RationalNumber* rncGet(RationalNumberCollection* rnc, const unsigned int index) {
     return (!rnc || !isValidIndex(rnc, index)) ? NULL : rnc->data + index;
+}
+
+RationalNumber rncSum(RationalNumberCollection* rnc) {
+    RationalNumber rn = RN_ZERO;
+    for (unsigned int i = 0; i < rnc->size; i++) rn = rnAdd(rn,rnc->data[i]);
+    return rn;
+}
+
+RationalNumber rncAverage(RationalNumberCollection* rnc) {
+    return rnDivide(rncSum(rnc),(RationalNumber){(int)rnc->size,1});
+}
+
+unsigned int rncCount(const RationalNumberCollection* rnc, const RationalNumber* rn) {
+   int count = 0;
+   for (unsigned int i = 0; i < rnc->size; i++) if(rnEqual(rnc->data[i],*rn)) count++;
+   return count;
+}
+
+unsigned int rncTotalCount(const RationalNumberCollection* rnc) {
+    return rnc->size;
+}
+
+unsigned int rncTotalUniqueCount(const RationalNumberCollection* rnc) {
+    int count = 1;
+    for (unsigned int i = 0; i < rnc->size; i++) if(rncCount(rnc, &rnc->data[i]) < 2) count++;
+    return count;
+}
+
+void rncPrint(RationalNumberCollection* rnc) {
+    printf("RationalNumberCollection: \n");
+    printf("size: %d\n", rnc->size);
+    printf("capacity: %d\n", rnc->capacity);
+    for (unsigned int i = 0; i < rnc->size; i++) rnPrint(rnc->data[i]);
+    printf("\n");
 }

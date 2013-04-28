@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 void runCollectionTests(){
-    printf("Performing RationalNumberCollection tests... ");
+    printf("Performing RationalNumberCollection tests...\n");
     fflush(stdout);
 
     const unsigned int rncCap = 20;
@@ -26,6 +26,7 @@ void runCollectionTests(){
     rncAdd(rnc, &rn3);
 
     assert(rncSize(rnc) == 3);
+    assert(rncSize(rnc) == rncTotalCount(rnc));
 
     rncRemove(rnc,0,1);
     assert(rncSize(rnc) == 2);
@@ -36,5 +37,15 @@ void runCollectionTests(){
     assert(rncGet(rnc,1)->numerator == rn3.numerator);
     assert(rncGet(rnc,1)->denominator == rn3.denominator);
 
-    printf("successful!\n");
+    RationalNumber rn4 = {5, 7};
+    rncAdd(rnc, &rn4);
+    assert(rnEqual(rnAdd(rnAdd(rn2,rn3),rn4), rncSum(rnc)));
+    assert(rnEqual(rnDivide(rnAdd(rnAdd(rn2,rn3),rn4),(RationalNumber) {3,1}) , rncAverage(rnc)));
+
+    assert(rncCount(rnc,&rn4) == 1);
+    rncAdd(rnc, &rn4);
+    assert(rncCount(rnc,&rn4) == 2);
+    assert(rncTotalUniqueCount(rnc) == 3 && rnc->size == 4);
+
+    printf("successful!\n\n");
 }

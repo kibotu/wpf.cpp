@@ -11,5 +11,6 @@ SOURCES += \
 
 HEADERS += \
     rationalnumber.h \
-    rationalnumbercollection.h
+    rationalnumbercollection.h \
+    testRNCollection.h
 

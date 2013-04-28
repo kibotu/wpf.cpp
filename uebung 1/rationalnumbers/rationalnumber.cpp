@@ -1,4 +1,5 @@
 #include <limits.h>
+#include <stdio.h>
 #include "rationalnumber.h"
 
 int gcd(int a, int b) {
@@ -72,4 +73,8 @@ RationalNumber rnMultiply(RationalNumber factor1, RationalNumber factor2) {
 
 RationalNumber rnDivide(RationalNumber divident, RationalNumber divisor) {
     return rnMultiply(divident, rnInvert(divisor));
+}
+
+void rnPrint(RationalNumber n) {
+    printf("{%d,%d}\n",n.numerator, n.denominator);
 }

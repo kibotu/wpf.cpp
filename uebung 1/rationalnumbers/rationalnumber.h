@@ -111,4 +111,6 @@ RationalNumber rnMultiply(RationalNumber, RationalNumber);
  */
 RationalNumber rnDivide(RationalNumber divident, RationalNumber divisor);
 
+void rnPrint(RationalNumber n);
+
 #endif // RATIONALNUMBER_H

@@ -18,15 +18,15 @@ void rncAdd(RationalNumberCollection* rnc, const RationalNumber* rn);
 
 void rncRemove();
 
-void rncSum();
+RationalNumber rncSum(RationalNumberCollection* rnc);
 
-void rncAverage();
+RationalNumber rncAverage(RationalNumberCollection* rnc);
 
-void rncCount();
+unsigned int rncCount(const RationalNumberCollection* rnc, const RationalNumber* rn);
 
-void rncTotalCount();
+unsigned int rncTotalCount(const RationalNumberCollection* rnc);
 
-void rncTotalUniqueCount();
+unsigned int rncTotalUniqueCount(const RationalNumberCollection* rnc);
 
 unsigned int rncSize(const RationalNumberCollection* rnc);
 
@@ -39,5 +39,7 @@ void rncSet(RationalNumberCollection* rnc, const unsigned int index, const Ratio
 RationalNumber* rncGet(RationalNumberCollection* rnc, const unsigned int index);
 
 void rncRemove(RationalNumberCollection* rnc, const unsigned int startIndex, const unsigned int endIndex);
+
+void rncPrint(RationalNumberCollection* rnc);
 
 #endif // RATIONALNUMBERCOLLECTION_H
