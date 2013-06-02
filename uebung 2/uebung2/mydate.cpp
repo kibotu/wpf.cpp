@@ -1,13 +1,14 @@
-namespace MyDate {
-    UnsignedIntValue::UnsignedIntValue(int v) {
-        this->v = v;
-    }
+#include "rationalnumber.h"
+using namespace MyDate;
 
-    UnsignedIntValue::~UnsignedIntValue() {
-        v = 0;
-    }
+UnsignedIntValue::UnsignedIntValue(int v) {
+    this->v = v;
+}
 
-    int UnsignedIntValue::value() {
-        return v;
-    }
+UnsignedIntValue::~UnsignedIntValue() {
+    v = 0;
+}
+
+int UnsignedIntValue::value() {
+    return v;
 }
