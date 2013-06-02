@@ -35,7 +35,7 @@ int main()
         assert(2012 == CONST_YEAR);
     }
 
-#if 0
+
     {
         // static member function Date::daysInMonth()
         int days_feb = Date::daysInMonth(2);
@@ -45,8 +45,16 @@ int main()
         int days_feb_2400 = Date::daysInMonth(Months(2),Years(2400));
         cout << "In year 2400, February will have " << days_feb_2400 << " days." << endl;
         assert(days_feb_2400 == 29);
-    }
 
+        // test months from 0 to 13
+        for(int i = 0; i <= 13; ++i) {
+            try {
+                Date::daysInMonth(Months(i));
+            } catch(const std::exception & e) {
+               cout << i << ":\t" << e.what() << endl;
+            }
+        }
+    }
     {
         // Date constructor, getters, and stream output
         Date d1;
@@ -68,8 +76,15 @@ int main()
         assert(d2 != d3);
         cout << "Date2 < Date3: " << (d2<d3) << endl;
         assert(d2<d3);
-        cout << "Date3 < Date3: " << (d3<d2) << endl;
+        cout << "Date3 > Date3: " << (!(d3<d2)) << endl;
         assert(!(d3<d2));
+
+        Date d4(29,2,2012);
+        cout << "Date4: " << d4 << endl;
+        cout << "Date4 < Date3: " << (d4<d3) << endl;
+        assert(d4<d3);
+        cout << "Date4 > Date3: " << (!(d4<d3)) << endl;
+        assert(!(d3<d4));
     }
 
     {
@@ -80,6 +95,14 @@ int main()
         assert(Date::isLeapYear(2000));
         cout << "Is 2100 a leap year: " << Date::isLeapYear(2100) << endl;
         assert(!Date::isLeapYear(2100));
+    }
+
+    {
+        Date d(0,1,0);
+        cout << "Date: " << d << endl;
+        cout << "Days(1): " << Days(1) << endl;
+        d += Days(1);
+        cout << "Date +1d: " << d << endl;
     }
 
     {
@@ -109,7 +132,7 @@ int main()
         assert(x == Date(5,1,2012));
 
     }
-
+#if 0
 
     {
         Date d3(1,1,2015);
