@@ -3,28 +3,28 @@
 
 namespace MyDate {
 
-    class Days {
+    class UnsignetIntValue {
+    protected:
         const unsigned int mValue;
     public:
-        Days (const int value = 0) : mValue((const unsigned int)value) { }
-        unsigned int value() const { return mValue; }
-        operator unsigned int() { return (int) mValue; }
-    };
-
-    class Months {
-        const unsigned int mValue;
-    public:
-        Months  (const int value = 0) : mValue((const unsigned int)value) { }
+        UnsignetIntValue (const int value = 0) : mValue((const unsigned int)value) { }
         unsigned int value() const { return mValue; }
         operator unsigned int() const { return (int) mValue; }
     };
 
-    class Years {
-        const unsigned int mValue;
+    class Days : public UnsignetIntValue {
     public:
-        Years (const int value = 0) : mValue((const unsigned int)value) { }
-        unsigned int value() const { return mValue; }
-        operator unsigned int() const { return (int) mValue; }
+        Days (const int value = 0) : UnsignetIntValue(value) { }
+    };
+
+    class Months : public UnsignetIntValue {
+    public:
+        Months (const int value = 0)  : UnsignetIntValue(value) { }
+    };
+
+    class Years : public UnsignetIntValue {
+    public:
+        Years (const int value = 0) : UnsignetIntValue(value) { }
     };
 }
 
