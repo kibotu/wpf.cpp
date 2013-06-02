@@ -62,7 +62,5 @@ Makefile
 *.autosave
 
 # qt debug release folders
-HelloC4J-build-Desktop_Qt_5_0_1_MinGW_32bit-Debug/
-fractions-build-Desktop_Qt_5_0_1_MinGW_32bit-Debug/
-collectfractions-build-Desktop_Qt_5_0_1_MinGW_32bit-Debug/
-hiddenanddynamic-build-Desktop_Qt_5_0_1_MinGW_32bit-Debug/
+rationalnumbers-build-Desktop_Qt_5_0_1_MinGW_32bit-Debug/
+uebung2-build-Desktop_Qt_5_0_1_MinGW_32bit-Debug/

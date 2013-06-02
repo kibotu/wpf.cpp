@@ -7,10 +7,12 @@ SOURCES += \
     testRN.cpp \
     rationalnumber.cpp \
     rationalnumbercollection.cpp \
-    testRNCollection.cpp
+    testRNCollection.cpp \
+    Node.cpp
 
 HEADERS += \
     rationalnumber.h \
     rationalnumbercollection.h \
-    testRNCollection.h
+    testRNCollection.h \
+    Node.h
 
