@@ -229,8 +229,19 @@ int main()
 
 		const Date d1(1,1,1);
 		const Date d2(2,2,2);
+		Days d(1);
+		Months m(1);
+		Years y(1);
 		cout << Date(d1.day() + d2.day(), d1.month() + d2.month(), d1.year() + d2.year()) << endl;
-				
+		cout << (d1+d2) << endl;
+		cout << (d1+d) << endl;
+		cout << (d1+m) << endl;
+		cout << (d1+y) << endl;
+
+		cout << (d1+Days(33)) << endl;
+		cout << (d1+Months(12)) << endl;
+		cout << (d1+Years(2012)) << endl;
+
 		SUCCESS
 	}
 
@@ -244,8 +255,8 @@ int main()
         assert(dd2 == Date(1,1,2013));
 
         Date dd3 = dd + Months(4);
-        cout << dd << " + 4 months = " << dd3 << " " << ( dd + Months(4)) << endl;
-        assert(dd3 == Date(30,4,2013));
+        cout << dd << " + 4 months = " << dd3 << endl;
+        assert(dd3 == Date(31,4,2013));
 
         Date dd4 = dd + Years(1000);
         cout << dd << " + 1000 years = " << dd4 << endl;

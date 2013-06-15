@@ -24,9 +24,6 @@ namespace MyDate {
         unsigned int value() const { return mValue; }
         operator unsigned int() const { return (int) mValue; }
         UnsignedIntValue operator =(const int other) { mValue = other; return *this; }
-		UnsignedIntValue& operator++(){ mValue++; return *this; }
-		UnsignedIntValue operator++(int) {  UnsignedIntValue tmp(*this);  operator++();  return tmp; }
-
 		bool operator ==(const UnsignedIntValue other) { return mValue == other.mValue; }
         bool operator !=(const UnsignedIntValue other) { return mValue != other.mValue; }
         UnsignedIntValue operator +=(const UnsignedIntValue other) { mValue += other.mValue; return *this; }
@@ -41,6 +38,9 @@ namespace MyDate {
 		bool operator >(const int other) { return mValue > (const unsigned int)other; }
 		bool operator <=(const UnsignedIntValue other) { return mValue <= other.mValue; }
 		bool operator >=(const UnsignedIntValue other) { return mValue >= other.mValue; }
+		
+		UnsignedIntValue& operator++(){ mValue++; return *this; }
+		UnsignedIntValue operator++(int) {  UnsignedIntValue tmp(*this);  operator++();  return tmp; }
     };
 
     class Days : public UnsignedIntValue {
@@ -84,6 +84,8 @@ namespace MyDate {
 		Date operator + (const Date other) const { return Date(this->mDays + other.mDays, this->mMonths + other.mMonths, this->mYears + other.mYears); }
 		Date operator - (const Date other) const { return Date(this->mDays - other.mDays, this->mMonths - other.mMonths, this->mYears - other.mYears); }
 
+		//Date& operator+= (const int& other){ return *this; }
+
 		/**
          * February normally has 28 days.
          */
@@ -119,12 +121,18 @@ namespace MyDate {
         }
 
         void normalize() {
-			while(mDays > daysInMonth(this->mMonths, this->mYears)){
-				mDays -= daysInMonth(this->mMonths, this->mYears);
-				this->mMonths++;
-				if(this->mMonths > 12){
-					this->mMonths = 1;
-					this->mYears++;
+
+			while(mMonths > 12){
+				mMonths -= 12;
+				mYears++;
+			}
+
+			while(mDays > daysInMonth(mMonths, mYears)){
+				mDays -= daysInMonth(mMonths, mYears);
+				mMonths++;
+				if(mMonths > 12){
+					mMonths = 1;
+					mYears++;
 				}
 			}
 		}
