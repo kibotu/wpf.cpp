@@ -12,7 +12,7 @@ namespace MyDate {
         const char * mMessage;
     public :
       InvalidArgumentException(const char * message) { mMessage = message; }
-	  ~InvalidArgumentException() { /*delete mMessage;*/ }
+	  ~InvalidArgumentException() { delete mMessage; }
       const char * what () const throw () { return mMessage; }
     };
 

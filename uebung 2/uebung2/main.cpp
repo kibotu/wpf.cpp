@@ -218,8 +218,8 @@ int main()
         assert(d3.year() == y3+20);
 
         // verifizieren Sie, dass die folgende Zeile NICHT compiliert,
-        // und kommentieren Sie sie dann aus
-        // d3 += 1;
+        // und kommentieren Sie sie dann aus 
+        // d3 += 1; // 'operator +=' is ambiguous
 		
 		SUCCESS
     }
@@ -256,7 +256,7 @@ int main()
 
         Date dd3 = dd + Months(4);
         cout << dd << " + 4 months = " << dd3 << endl;
-        assert(dd3 == Date(31,4,2013));
+        assert(dd3 == Date(31,4,2013)); // 1.5.2013
 
         Date dd4 = dd + Years(1000);
         cout << dd << " + 1000 years = " << dd4 << endl;
@@ -270,7 +270,7 @@ int main()
 		SUCCESS
     }
 
-	cout << "\n\nall tests completed." << endl;
+	cout << "all tests completed." << endl;
 
 	system("pause");
 
