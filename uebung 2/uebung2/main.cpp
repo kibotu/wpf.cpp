@@ -13,11 +13,15 @@
 using namespace std;
 using namespace MyDate;
 
+#define SUCCESS cout << "successful" << endl << endl;
+
 int main()
 {
-    cout << "Starting Unit Tests for Day, Month, Year, Date..." << endl;
+    cout << "Starting Unit Tests for Day, Month, Year, Date...\n" << endl;
 
     {
+		cout << "test: typesafety... " ;
+
         // Day, Month, Year are just type-safe wrappers for unsigned int
         Days myday;
         assert(myday.value() == 0);
@@ -33,10 +37,13 @@ int main()
         assert(0 == myday);
         assert(12 == mymonth);
         assert(2012 == CONST_YEAR);
+
+		SUCCESS
     }
 
-
     {
+		cout << "test: leap year... " << endl;
+
         // static member function Date::daysInMonth()
         int days_feb = Date::daysInMonth(2);
         cout << "February normally has " << days_feb << " days." << endl;
@@ -54,17 +61,49 @@ int main()
                cout << i << ":\t" << e.what() << endl;
             }
         }
+
+		SUCCESS
     }
+
+	{
+		cout << "test: daysInMonth... ";
+
+		assert(Date::daysInMonth(Months(1)) == 31);
+		assert(Date::daysInMonth(Months(2)) == 28);
+		assert(Date::daysInMonth(Months(2),2000) == 29);
+		assert(Date::daysInMonth(Months(3)) == 31);
+		assert(Date::daysInMonth(Months(4)) == 30);
+
+		assert(Date::daysInMonth(Months(5)) == 31);
+		assert(Date::daysInMonth(Months(6)) == 30);
+		assert(Date::daysInMonth(Months(7)) == 31);
+		assert(Date::daysInMonth(Months(8)) == 31);
+
+		assert(Date::daysInMonth(Months(9)) == 30);
+		assert(Date::daysInMonth(Months(10)) == 31);
+		assert(Date::daysInMonth(Months(11)) == 30);
+		assert(Date::daysInMonth(Months(12)) == 31);
+
+		SUCCESS
+	}
+
     {
+		cout << "test: default constructor... " << endl;
+
         // Date constructor, getters, and stream output
         Date d1;
         cout << "Date1: " << d1 << endl;
         assert(d1.day() == 0);
         assert(d1.month() == 0);
         assert(d1.year() == 0);
+
+		SUCCESS
     }
+	
 
     {
+		cout << "test: compare operators... " << endl;
+
         // comparison of two dates
         Date d2(1, 1, 2013);
         cout << "Date2: " << d2 << endl;
@@ -82,12 +121,18 @@ int main()
         Date d4(29,2,2012);
         cout << "Date4: " << d4 << endl;
         cout << "Date4 < Date3: " << (d4<d3) << endl;
-        assert(d4<d3);
-        cout << "Date4 > Date3: " << (!(d4<d3)) << endl;
-        assert(!(d3<d4));
+        assert(d3<d4);
+		cout << "Date4 > Date3: " << (d4>d3) << endl;
+        assert(!(d3>d4));
+        cout << "Date4 !< Date3: " << (!(d4<d3)) << endl;
+        assert(!(d4<d3));
+
+		SUCCESS
     }
 
     {
+		cout << "test: leap year... " << endl;
+
         // static member function Date::isLeapYear()
         cout << "Is 1999 a leap year: " << Date::isLeapYear(1999) << endl;
         assert(!Date::isLeapYear(1999));
@@ -95,17 +140,37 @@ int main()
         assert(Date::isLeapYear(2000));
         cout << "Is 2100 a leap year: " << Date::isLeapYear(2100) << endl;
         assert(!Date::isLeapYear(2100));
-    }
 
+		SUCCESS
+    }
+	
     {
+		cout << "test: add day to date... " << endl;
+
         Date d(0,1,0);
         cout << "Date: " << d << endl;
         cout << "Days(1): " << Days(1) << endl;
         d += Days(1);
         cout << "Date +1d: " << d << endl;
+		
+		SUCCESS
+    }
+
+	{
+		cout << "test: ++ operator... " << endl;
+
+        Days d(1);
+        cout << "Day: " << d << endl;
+        d++;
+        cout << "Day +1d: " << d << endl;
+		assert(d == Days(2));
+		
+		SUCCESS
     }
 
     {
+		cout << "test: date arythmethic... " << endl;
+
         Date d3(28, 2, 2013);
 
         // add one day
@@ -120,7 +185,8 @@ int main()
         assert(d3 == Date(1,9,2013));
 
         // add more days (so year is changed)
-        int evenmoredays = 480;
+        int evenmoredays = 30+31+30+31+365; //480;
+        cout << "Date3: " << d3 << endl;
         d3 += Days(evenmoredays);
         cout << "Date3 +" << evenmoredays << "d: " << d3 << endl;
         assert(d3.year() == 2015);
@@ -131,11 +197,13 @@ int main()
         cout << x << " + 4d = " << y <<endl;
         assert(x == Date(5,1,2012));
 
+		SUCCESS
     }
-#if 0
 
     {
-        Date d3(1,1,2015);
+		cout << "test: some more date arythmethic... " << endl;
+
+		Date d3(1,1,2015);
 
         // add months
         Months m3 = d3.month();
@@ -152,17 +220,31 @@ int main()
         // verifizieren Sie, dass die folgende Zeile NICHT compiliert,
         // und kommentieren Sie sie dann aus
         // d3 += 1;
+		
+		SUCCESS
     }
 
+	{
+		cout << "test: addition... " << endl;
+
+		const Date d1(1,1,1);
+		const Date d2(2,2,2);
+		cout << Date(d1.day() + d2.day(), d1.month() + d2.month(), d1.year() + d2.year()) << endl;
+				
+		SUCCESS
+	}
+
     {
-        // non-mutating addition operators
+		cout << "test: non-mutating addition operators... " << endl;
+
+		// non-mutating addition operators
         const Date dd(31,12,2012);
         Date dd2 = dd + Days(1);
         cout << dd << " + 1 day = " << dd2 << endl;
         assert(dd2 == Date(1,1,2013));
 
         Date dd3 = dd + Months(4);
-        cout << dd << " + 4 months = " << dd3 << endl;
+        cout << dd << " + 4 months = " << dd3 << " " << ( dd + Months(4)) << endl;
         assert(dd3 == Date(30,4,2013));
 
         Date dd4 = dd + Years(1000);
@@ -174,10 +256,12 @@ int main()
         cout << dd << " + 2d + 3m + 5y = " << dd5 << endl;
         assert(dd5 == Date(2,4,2018));
 
+		SUCCESS
     }
-#endif
 
-    cout << "all tests completed." << endl;
+	cout << "\n\nall tests completed." << endl;
+
+	system("pause");
 
     return 0;
 }

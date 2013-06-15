@@ -1,44 +1,61 @@
 #ifndef MYDATE_H
 #define MYDATE_H
 
+#include <iostream>
+#include <exception>
+#include <ostream>
+using namespace std;
+
 namespace MyDate {
 
-    class InvalidArgumentException : public std::exception {
+    class InvalidArgumentException : public exception {
         const char * mMessage;
     public :
       InvalidArgumentException(const char * message) { mMessage = message; }
+	  ~InvalidArgumentException() { /*delete mMessage;*/ }
       const char * what () const throw () { return mMessage; }
     };
 
-    class UnsignetIntValue {
+    class UnsignedIntValue {
     protected:
         unsigned int mValue;
     public:
-        UnsignetIntValue (const int value = 0) : mValue((const unsigned int)value) { }
+        UnsignedIntValue (const int value = 0) : mValue((const unsigned int)value) { }
         unsigned int value() const { return mValue; }
         operator unsigned int() const { return (int) mValue; }
-        bool operator ==(UnsignetIntValue other) { return mValue == other.mValue; }
-        bool operator !=(UnsignetIntValue other) { return mValue != other.mValue; }
-        UnsignetIntValue operator +=(UnsignetIntValue other) { mValue += other.mValue; return *this; }
-        UnsignetIntValue operator -=(UnsignetIntValue other) { mValue -= other.mValue; return *this; }
-        UnsignetIntValue operator =(int other) { mValue = other; return *this; }
-        UnsignetIntValue operator +(UnsignetIntValue other) { return UnsignetIntValue(mValue + other.mValue); }
-        UnsignetIntValue operator -(UnsignetIntValue other) { return UnsignetIntValue(mValue - other.mValue); }
+        UnsignedIntValue operator =(const int other) { mValue = other; return *this; }
+		UnsignedIntValue& operator++(){ mValue++; return *this; }
+		UnsignedIntValue operator++(int) {  UnsignedIntValue tmp(*this);  operator++();  return tmp; }
+
+		bool operator ==(const UnsignedIntValue other) { return mValue == other.mValue; }
+        bool operator !=(const UnsignedIntValue other) { return mValue != other.mValue; }
+        UnsignedIntValue operator +=(const UnsignedIntValue other) { mValue += other.mValue; return *this; }
+        UnsignedIntValue operator -=(const UnsignedIntValue other) { mValue -= other.mValue; return *this; }
+        UnsignedIntValue operator +(const UnsignedIntValue other) { return UnsignedIntValue(mValue + other.mValue); }
+        UnsignedIntValue operator +(const int other) { return UnsignedIntValue(mValue + other); }
+        UnsignedIntValue operator -(const UnsignedIntValue other) { return UnsignedIntValue(mValue - other.mValue); }
+		UnsignedIntValue operator -(const int other) { return UnsignedIntValue(mValue - other); }
+		bool operator <(const UnsignedIntValue other) { return mValue < other.mValue; }
+		bool operator <(const int other) { return mValue < (const unsigned int)other; }
+		bool operator >(const UnsignedIntValue other) { return mValue > other.mValue; }
+		bool operator >(const int other) { return mValue > (const unsigned int)other; }
+		bool operator <=(const UnsignedIntValue other) { return mValue <= other.mValue; }
+		bool operator >=(const UnsignedIntValue other) { return mValue >= other.mValue; }
     };
 
-    class Days : public UnsignetIntValue {
+    class Days : public UnsignedIntValue {
     public:
-        Days (const int value = 0) : UnsignetIntValue(value) { }
+        Days (const int value = 0) : UnsignedIntValue(value) { }
     };
 
-    class Months : public UnsignetIntValue {
+    class Months : public UnsignedIntValue {
     public:
-        Months (const int value = 0)  : UnsignetIntValue(value) { }
+        Months (const int value = 0)  : UnsignedIntValue(value) { }
     };
 
-    class Years : public UnsignetIntValue {
+    class Years : public UnsignedIntValue {
     public:
-        Years (const int value = 0) : UnsignetIntValue(value) { }
+        Years (const int value = 0) : UnsignedIntValue(value) { }
     };
 
     class Date {
@@ -46,25 +63,33 @@ namespace MyDate {
         Months mMonths;
         Years mYears;
     public:
-        Date(const int days = 0, const int months = 0, const int years = 0) : mDays(days), mMonths(months), mYears(years) {
-           /* int validDays = daysInMonth(months);
-            if(days < 1 || days > validDays) throw InvalidArgumentException("Date: 'days' must be between 0 an " + validDays);
-            if(months < 1 || months > 12) throw InvalidArgumentException("Date: 'months' must be between 0 an 12");
-            if(years < 1 || years > 12) throw InvalidArgumentException("Date: 'years' must be over 0");*/
-        }
+        Date(const int days = 0, const int months = 0, const int years = 0) : mDays(days), mMonths(months), mYears(years) { normalize(); }
+		const Days day() const { return mDays; }
+        const Months month() const { return mMonths; }
+        const Years year() const { return mYears; }
+        friend ostream& operator << (ostream &stream, Date date) { stream << date.day() << '.'<< date.month() << '.' << date.year(); return stream; }
+		bool operator == (const Date other) { return this->mDays == other.mDays && this->mMonths == other.mMonths && this->mYears == other.mYears;  }
+        bool operator != (const Date other) const { return this->mDays != other.mDays || this->mMonths != other.mMonths || this->mYears != other.mYears; }
+		bool operator < (const Date other) const { return this->getAsDays() < other.getAsDays(); }
+		bool operator > (const Date other) const { return this->getAsDays() > other.getAsDays(); }
+        Date operator += (const Days other) { mDays += other; normalize(); return *this; }
+		Date operator += (const Months other) { mMonths += other; normalize(); return *this; }
+		Date operator += (const Years other) { mYears += other; normalize(); return *this; }
+		Date operator + (const Days other) const { return Date(this->mDays + other, this->mMonths, this->mYears); }
+		Date operator + (const Months other) const { return Date(this->mDays, this->mMonths + other, this->mYears); }
+		Date operator + (const Years other) const { return Date(this->mDays, this->mMonths, this->mYears + other); }
+		Date operator - (const Days other) const { return Date(this->mDays - other, this->mMonths, this->mYears); }
+		Date operator - (const Months other) const { return Date(this->mDays, this->mMonths - other, this->mYears); }
+		Date operator - (const Years other) const { return Date(this->mDays, this->mMonths, this->mYears - other); }
+		Date operator + (const Date other) const { return Date(this->mDays + other.mDays, this->mMonths + other.mMonths, this->mYears + other.mYears); }
+		Date operator - (const Date other) const { return Date(this->mDays - other.mDays, this->mMonths - other.mMonths, this->mYears - other.mYears); }
 
-        /**
-         * Check if the year is divisible by 4 or is divisible by 400
-         */
-        static bool isLeapYear(Years y) {
-            return (y % 4 == 0 && y % 100 != 0) || ( y % 400 == 0) ? true : false;
-        }
-
-        /**
+		/**
          * February normally has 28 days.
          */
         static int daysInMonth(Months m, Years y = Years(1)){
-            if(m < 1 || m > 12) throw InvalidArgumentException("Date::daysInMonth(): 'm' must be between 0 an 12");
+            // if(m < 1 || m > 12) throw InvalidArgumentException("Date::daysInMonth(): 'm' must be between 0 an 12");
+			if(m < Months(1) || m > Months(12)) { return 0; }
             int result = 31;
             switch(m) {
             case 2: result = isLeapYear(y) ? 29 : 28; break;
@@ -76,50 +101,34 @@ namespace MyDate {
             return result;
         }
 
-        const Days day() const { return mDays; }
-        const Months month() const { return mMonths; }
-        const Years year() const { return mYears; }
-        friend std::ostream& operator<<(std::ostream &stream, Date date)
-        {
-            stream << date.day() << '.'<< date.month() << '.' << date.year();
-            return stream;
+		/**
+         * Check if the year is divisible by 4 or is divisible by 400
+         */
+        static bool isLeapYear(Years y) {
+            return (y % 4 == 0 && y % 100 != 0) || ( y % 400 == 0) ? true : false;
         }
+
+	private:
+
         int getAsDays() const {
             // use previous month days, except it's january then the current days count
-            std::cout << "getAsDays mDays " << mDays << std::endl;
-            return 360 * mYears + (mMonths == 1 ? 0 : daysInMonth(mMonths-1, mYears)) + mDays;
+			const int months = mMonths == 1 ? 0 : daysInMonth(mMonths-1, mYears);
+            const int daysOfYear = isLeapYear(mYears)? 366 : 365;
+			const int years = daysOfYear * mYears;
+            return mDays + months + years;
         }
-        bool operator ==(const Date other) {
-            return this->mDays == other.mDays && this->mMonths == other.mMonths && this->mYears == other.mYears;
-        }
-        bool operator !=(const Date other) const {
-            return this->mDays != other.mDays || this->mMonths != other.mMonths || this->mYears != other.mYears;
-        }
-        bool operator <(const Date other) const {
-            return this->getAsDays() < other.getAsDays();
-        }
-        bool operator >(const Date other) const {
-            return this->getAsDays() > other.getAsDays();
-        }
-        Date operator+=(const Days other) {
-            mDays += other;
-            normalize();
-            return *this;
-        }
+
         void normalize() {
-            int totalDays = getAsDays();
-            std::cout << "bla " << totalDays << std::endl;
-            std::cout << "mMonths " << mMonths << std::endl;
-            std::cout << "mDays " << mDays << std::endl;
-            mYears = totalDays % 360;
-            std::cout << mYears << std::endl;
-            totalDays = totalDays - mYears * 360;
-            mMonths = totalDays % 12;
-            mDays = totalDays - mMonths * 12;
-            std::cout << totalDays;
-            assert(totalDays == 0);
-        }
-    };
+			while(mDays > daysInMonth(this->mMonths, this->mYears)){
+				mDays -= daysInMonth(this->mMonths, this->mYears);
+				this->mMonths++;
+				if(this->mMonths > 12){
+					this->mMonths = 1;
+					this->mYears++;
+				}
+			}
+		}
+	};
 }
 
 #endif // MYDATE_H
