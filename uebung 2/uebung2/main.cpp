@@ -313,11 +313,17 @@ int main()
 
 	{ 
 		cout << "test: [] operator... " << endl;
-		Date d1 = Date(22,1,1986);
-		Map::Pair p1(d1,"birthday");
+		Map::key_t d1 = Map::key_t(22,1,1986);
+		Map::mapped_t s1 = "birthday";
+		Map::Pair p1(d1,s1);
 		Map m;
 
 		m.insert(p1);
+		assert(m.size() == 1); 
+		
+		cout << "<" << m.find(p1)->first << "," << m.find(p1)->second << ">" << endl;
+		//cout << m.find(s1)->first << endl;
+		//cout << m.find(d1)->first << endl;
 		assert(m.size() == 1); 
 
 		Map::mapped_t value = m[d1]; 

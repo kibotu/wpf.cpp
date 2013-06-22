@@ -1,5 +1,5 @@
 #include "mydate_map.h"
-
+#include <iostream>
 namespace MyDate {
 
 	// getters
@@ -44,7 +44,6 @@ namespace MyDate {
 
 	// find pair, basically finds if there is a key with that value
 	Map::MapIterator Map::find(const Map::Pair& pair) {
-		if(!m_root) insert(pair); 
 		return MapIterator(this, m_root->find(pair));
     }
 
@@ -60,6 +59,9 @@ namespace MyDate {
 	const Map::mapped_t& Map::operator [] (const Map::key_t& key) {
 		Map::Pair pair = Pair(key,Map::mapped_t()); // create default pair to search for key
 		Map::MapIterator iter = find(pair);
+
+		if(iter != end()) cout << "<" << iter->first << "," << iter->second << ">" << endl;
+
         if(iter != end()) return iter->second;		// return found pair	
         insert(pair);								// or insert new pair	
         return find(pair)->second;
@@ -76,5 +78,13 @@ namespace MyDate {
 
     Map::MapIterator Map::end(){
         return Map::MapIterator(this, 0);
+    }
+
+    Map::MapIterator Map::first() {
+        return begin();
+    }
+
+    Map::MapIterator Map::last() {
+		return m_root ? Map::MapIterator(this, m_root->findLast()) : Map::MapIterator(this, 0);
     }
 }

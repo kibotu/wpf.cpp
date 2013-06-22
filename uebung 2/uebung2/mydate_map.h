@@ -118,6 +118,8 @@ namespace MyDate {
 		// miscellaneous 
 		MapIterator begin();
         MapIterator end();
+        MapIterator first();
+        MapIterator last();
 	};
 }
 
