@@ -20,19 +20,19 @@ namespace MyDate {
 
 		public:
 
-			Less<mapped_t> *m_order; 
-			mapped_t m_value;
+			Less<pair> *m_order; 
+			pair m_value;
 			Node *m_left;
 			Node *m_right;
 			Node *m_up;
 
-			Node(const mapped_t &value, Less<mapped_t> *order, Node *up = 0): m_value(value), m_order(order), m_left(0), m_right(0), m_up(up) { }
+			Node(const pair &value, Less<pair> *order, Node *up = 0): m_value(value), m_order(order), m_left(0), m_right(0), m_up(up) { }
 
-			mapped_t& value() { return m_value; }
+			pair& value() { return m_value; }
 			Node* findFirst() { return m_left == 0 ? this : m_left->findFirst(); } 
 			Node* findLast() { return m_right == 0 ? this : m_right->findFirst(); }
 
-			Node* find(const mapped_t&value){
+			Node* find(const pair&value){
 				// larger value? try right
 				if((*m_order)(m_value, value)) return m_right ? m_right->find(value) : 0;
 				// smaller value? try left
@@ -43,7 +43,7 @@ namespace MyDate {
 		};
 
 		// constructors
-		Map():m_root(0),m_size(0),m_order(Less<mapped_t>()) {}
+		Map():m_root(0),m_size(0),m_order(Less<pair>()) {}
 		~Map() { if(m_root != 0) { delete(m_root); } }
 
 		// getters
@@ -71,7 +71,7 @@ namespace MyDate {
 		// variables
 		Node* m_root; 
 		size_t m_size; 
-		Less<mapped_t> m_order;
+		Less<pair> m_order;
 		const mapped_t M_NOT_IN_MAP;  
 	};
 }	 

@@ -319,6 +319,14 @@ int main()
 		cout << "map 42-7: ";
 		assert(m.size() == 2);
 
+		Map::mapped_t value;
+
+		 // test finding elements via operator()
+		cout << "find 42 in map: " << (value=m[p42.first()]) << endl;
+		assert(value == p42.second());
+		cout << "find 3 in map: " << (value=m[p3.first()]) << endl;
+		assert(value == string());
+
 		SUCCESS
 	}
 
