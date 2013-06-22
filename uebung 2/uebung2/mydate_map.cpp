@@ -4,47 +4,81 @@ namespace MyDate {
 
 	// getters
 	Map::Node* Map::getRootNode() { return m_root; }
-	size_t Map::size() const{ return m_size; }
+	size_t Map::size() const { return m_size; }
 
 	// setters
-	void Map::insert(Map::pair value) { 
-		Node *parent = 0;
-		Node **target = &m_root;                // starting with root
-		while(*target) {                        // find where value needs to go
-			if (m_order(value, (*target)->value())) {
-				parent = *target;               // smaller value goes left
-				target = &((*target)->m_left);
-			} else if (m_order((*target)->value(), value)) {
-				parent = *target;               // larger value goes right
-				target = &((*target)->m_right);
-			} else {
-				break;                          // it's there already!
-			}
-		}
-		if (*target) {
-			(*target)->m_value = value;         // replace value if node exists
-		} else {
-			*target = new Node(value, &m_order, parent);    // or create new leaf with value
-			m_size++;
-		}
+	void Map::insert(Map::key_t& key, Map::mapped_t& value) {
 	}
-	void Map::insert(Map::key_t key, int id) { }
 
-	// basic functions
-	Map::Node* Map::find(const Map::mapped_t& value) { return m_root->find(Map::pair(key_t(),value)); }
-	Map::Node* Map::find(const Map::pair& pair) { return m_root->find(pair); }
-	Map::Node* Map::find(const key_t& key) { return 0; }
-	const Map::mapped_t Map::findReadOnly(Map::Node& last, const key_t& key) const { return 0; }
-	bool Map::contains(Map::Node& last, const key_t& key) { return false; }
+	Map::MapIterator Map::insert(const Map::Pair& pair) {
+        Map::Node *parent = 0;
+        Map::Node **target = &m_root;						// starting with root
+        while(*target) {									
+            if (m_order(pair, (*target)->value())) {
+                parent = *target;							// left smaller value
+                target = &((*target)->m_left);
+            } else if (m_order((*target)->value(), pair)) {
+                parent = *target;							// right: larger value 
+                target = &((*target)->m_right);
+            } else break;									// already there
+        }
 
-	// operators
-	const Map::mapped_t& Map::operator[](const Map::key_t& key) {
-        pair keypair = pair(key,mapped_t()); // create default pair to search for key
-        Node* result = find(keypair); // return found pair
-		if(result) return result->m_value.second();
-		insert(keypair);  // or insert default pair
-        return find(keypair)->m_value.second();
+		// actual insertion
+        if (*target) (*target)->m_pair = pair;				// replace value if node exists
+        else { 
+			*target = new Node(pair, &m_order, parent);		// or create new leaf with value
+			++m_size;
+		}
+        return MapIterator(this, *target);
     }
 
-	void Map::operator = (Map& map) { }
+	// find by key
+	Map::Node* Map::find(const Map::key_t& key) const {
+		return 0;
+	}
+
+	// find by value
+	Map::Node* Map::find(const Map::mapped_t& value) const {
+		return 0;
+	}
+
+	// find pair, basically finds if there is a key with that value
+	Map::Node* Map::find(const Map::Pair& pair) const {
+		return 0;
+	}
+
+	Map::MapIterator Map::find(const Map::Pair& value) {
+		if(!m_root) insert(value); 
+		return MapIterator(this, m_root->find(value));
+    }
+
+	const Map::mapped_t Map::findReadOnly(Map::Node& last, const Map::key_t& key) const {
+		return 0;
+	}
+
+	bool Map::contains(Map::Node& last, const Map::key_t& key) const {
+		return 0;
+	}
+
+	// operators
+	const Map::mapped_t& Map::operator [] (const Map::key_t& key) {
+		Map::Pair pair = Pair(key,Map::mapped_t()); // create default pair to search for key
+		Map::MapIterator iter = find(pair);
+        if(iter != end()) return iter->second;		// return found pair	
+        insert(pair);								// or insert new pair	
+        return find(pair)->second;
+	}
+
+	void Map::operator = (Map& map) {
+	}
+
+	// miscellaneous 
+
+	Map::MapIterator Map::begin(){
+		return m_root ? Map::MapIterator(this, m_root->findFirst()) : Map::MapIterator(this, 0);
+    }
+
+    Map::MapIterator Map::end(){
+        return Map::MapIterator(this, 0);
+    }
 }

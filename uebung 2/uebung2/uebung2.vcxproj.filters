@@ -29,13 +29,10 @@
     <ClInclude Include="mydate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="mydate_map.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="pair.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="order.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mydate_map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

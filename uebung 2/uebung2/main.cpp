@@ -275,11 +275,10 @@ int main()
 	{
 		cout << "test: pair... " << endl;
 
-		Pair<int,float> i_f(2,3.14f);
-		Pair<int,float> i_f2(4,3.14f);
-		Pair<string,string> s_s("Hello","World!");
-		cout << i_f << " " << s_s << endl;
-
+		Map::Pair p1(Date(1,1,1),"first");
+		Map::Pair p2(Date(22,6,2013),"second");
+		cout << '<' << p1.first  << ',' << p1.second << '>' << endl;
+		cout << '<' << p2.first  << ',' << p2.second << '>' << endl;
 		SUCCESS
 	}
 
@@ -302,6 +301,33 @@ int main()
 
 		SUCCESS
 	}
+	
+	{ 
+		cout << "test: empty map... " << endl;
+
+		Map m;
+		assert(m.size() == 0); 
+
+		SUCCESS
+	}
+
+	{ 
+		cout << "test: [] operator... " << endl;
+		Date d1 = Date(22,1,1986);
+		Map::Pair p1(d1,"birthday");
+		Map m;
+
+		m.insert(p1);
+		assert(m.size() == 1); 
+
+		Map::mapped_t value = m[d1]; 
+		cout << value << endl;
+		//assert(m.size() == 1); 
+
+		SUCCESS
+	}
+
+#if 0 // move this line down while your implementation proceeds...
 
 	{
 		cout << "test: map... " << endl;
@@ -329,8 +355,6 @@ int main()
 
 		SUCCESS
 	}
-
-#if 0 // move this line down while your implementation proceeds...
 
 	{
 		cout << "test: map... " << endl;
