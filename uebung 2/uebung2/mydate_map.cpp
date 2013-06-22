@@ -6,8 +6,8 @@ namespace MyDate {
 	Map::Node* Map::getRootNode() { return m_root; }
 	size_t Map::size() const { return m_size; }
 
-	// setters
-	void Map::insert(Map::key_t& key, Map::mapped_t& value) {
+	Map::MapIterator Map::insert(Map::key_t& key, Map::mapped_t& value) {
+		return insert(Pair(key,value));
 	}
 
 	Map::MapIterator Map::insert(const Map::Pair& pair) {
@@ -33,31 +33,27 @@ namespace MyDate {
     }
 
 	// find by key
-	Map::Node* Map::find(const Map::key_t& key) const {
-		return 0;
+	Map::MapIterator Map::find(const Map::key_t& key) {
+		return find(Pair(key, mapped_t()));
 	}
 
 	// find by value
-	Map::Node* Map::find(const Map::mapped_t& value) const {
-		return 0;
+	Map::MapIterator Map::find(const Map::mapped_t& value) {
+		return find(Pair(key_t(), value)); // ZODO doesn't find a value
 	}
 
 	// find pair, basically finds if there is a key with that value
-	Map::Node* Map::find(const Map::Pair& pair) const {
-		return 0;
-	}
-
-	Map::MapIterator Map::find(const Map::Pair& value) {
-		if(!m_root) insert(value); 
-		return MapIterator(this, m_root->find(value));
+	Map::MapIterator Map::find(const Map::Pair& pair) {
+		if(!m_root) insert(pair); 
+		return MapIterator(this, m_root->find(pair));
     }
 
-	const Map::mapped_t Map::findReadOnly(Map::Node& last, const Map::key_t& key) const {
+	const Map::mapped_t Map::findReadOnly(const Map::key_t& key) const {
 		return 0;
 	}
 
-	bool Map::contains(Map::Node& last, const Map::key_t& key) const {
-		return 0;
+	bool Map::contains(const Map::key_t& key) const {
+		return m_root->find(key) == 0;
 	}
 
 	// operators
