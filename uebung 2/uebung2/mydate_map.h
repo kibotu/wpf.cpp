@@ -26,20 +26,29 @@ namespace MyDate {
 			order_t *m_order;
 			Node *m_up, *m_left, *m_right;
 
-			Node(const Pair &pair, order_t *order = &order_t(), Node *parent = 0) : m_pair(pair), m_order(order), m_left(0), m_right(0), m_up(parent) { }
-			Node(const key_t &key, const mapped_t &value, order_t *order = &order_t(), Node *parent = 0) : m_pair(Pair(key,value)), m_order(order), m_left(0), m_right(0), m_up(parent) { }
+			explicit Node(const Pair &pair, order_t *order = &order_t(), Node *parent = 0) : m_pair(pair), m_order(order), m_left(0), m_right(0), m_up(parent) { }
+			explicit Node(const key_t &key, const mapped_t &value, order_t *order = &order_t(), Node *parent = 0) : m_pair(Pair(key,value)), m_order(order), m_left(0), m_right(0), m_up(parent) { }
 			~Node() { 
 				/*if(m_up) delete m_up;
 				if(m_left) delete m_left;
 				if(m_right) delete m_right;*/
 			}
-			
 			Pair& value() { return m_pair; }
-			Node* find(const key_t& key) { return find(Pair(key, mapped_t())); }
+
 			Node* find(const Pair&value) {
 				if((*m_order)(m_pair, value)) return m_right ? m_right->find(value) : 0;		// larger value: try right         
 				else if((*m_order)(value, m_pair)) return m_left ? m_left->find(value) : 0;		// smaller value: try left
 				else return this;																// equal value
+			}
+			Node* find(const key_t& key) {
+				if(m_pair.first < key) return m_right ? m_right->find(key) : 0;					         
+				else if(key <m_pair.first) return m_left ? m_left->find(key) : 0;				
+				else return this;	
+			}
+			Node* find(const mapped_t& value) {
+				if(m_pair.second < value) return m_right ? m_right->find(value) : 0;			         
+				else if(value <m_pair.second) return m_left ? m_left->find(value) : 0;			
+				else return this;																
 			}
 			Node* insert(const key_t& key, const mapped_t& value) { }
 			Node* findFirst(){ return m_left == 0 ? this : m_left->findFirst(); }				// leftmost node
@@ -48,25 +57,23 @@ namespace MyDate {
 		
 		class MapIterator {
 
-			Map *m_map;
+			const Map *m_map;
 			Node *m_node;
 
 		public:
 
-			MapIterator(Map *tree, Node *node) : m_map(tree), m_node(node) { }
-			Pair& operator*(){ return m_node->value(); }
+			MapIterator(const Map *tree, Node *node) : m_map(tree), m_node(node) { }
+			Pair& operator*() { return m_node->value(); }
 			Pair* operator->() { return &m_node->value(); }
-			bool operator==(const MapIterator &rhs) { return m_node == rhs.m_node; } // iterators are equal if they point to same node
-			bool operator!=(const MapIterator &rhs) { return !(*this == rhs); }
+			const bool operator==(const MapIterator &rhs) const { return m_node == rhs.m_node; } // iterators are equal if they point to same node
+			const bool operator!=(const MapIterator &rhs) const { return !(*this == rhs); }
 
 			MapIterator& operator++() {
 				if (!m_node) return *this;  // stay at end
 				if( m_node->m_right != 0 ) m_node = m_node->m_right->findFirst();  // if we can go right, go to leftmost node in right subtree
 				else {
 					Node *cur = m_node->m_up;  // otherwise, go up until larger node or 0
-					while(cur && m_map->m_order(cur->value(), m_node->value())){
-						cur = cur->m_up;
-					}
+					while(cur && m_map->m_order(cur->value(), m_node->value()))	cur = cur->m_up;
 					m_node = cur;
 				}
 				return *this;
@@ -108,16 +115,17 @@ namespace MyDate {
 		MapIterator find(const key_t& key);
 		MapIterator find(const mapped_t& value);
 		MapIterator find(const Pair& pair);
-		const mapped_t findReadOnly(const key_t& key) const;
+		const MapIterator findReadOnly(const Map::key_t& key) const;
 		bool contains(const key_t& key) const;
 
 		// operators
-		const mapped_t& operator [] (const key_t& key);
+		mapped_t& operator [] (const key_t& key);
+		const mapped_t& operator [] (const key_t& key) const;
 		void operator = (Map& map);
 
 		// miscellaneous 
 		MapIterator begin();
-        MapIterator end();
+        MapIterator end() const;
         MapIterator first();
         MapIterator last();
 	};

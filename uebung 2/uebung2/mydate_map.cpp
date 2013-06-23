@@ -34,40 +34,43 @@ namespace MyDate {
 
 	// find by key
 	Map::MapIterator Map::find(const Map::key_t& key) {
-		return find(Pair(key, mapped_t()));
+		return MapIterator(this, m_root->find(key));
 	}
 
 	// find by value
 	Map::MapIterator Map::find(const Map::mapped_t& value) {
-		return find(Pair(key_t(), value)); // ZODO doesn't find a value
+		return MapIterator(this, m_root->find(value));
 	}
 
-	// find pair, basically finds if there is a key with that value
+	// find pair
 	Map::MapIterator Map::find(const Map::Pair& pair) {
 		return MapIterator(this, m_root->find(pair));
     }
 
-	const Map::mapped_t Map::findReadOnly(const Map::key_t& key) const {
-		return 0;
+	const Map::MapIterator Map::findReadOnly(const Map::key_t& key) const {
+		return Map::MapIterator(this, m_root->find(key));
 	}
 
 	bool Map::contains(const Map::key_t& key) const {
-		return m_root->find(key) == 0;
+		return m_root->find(key) && m_root->find(key)->m_pair.first == key;
 	}
 
 	// operators
-	const Map::mapped_t& Map::operator [] (const Map::key_t& key) {
-		Map::Pair pair = Pair(key,Map::mapped_t()); // create default pair to search for key
-		Map::MapIterator iter = find(pair);
-
-		if(iter != end()) cout << "<" << iter->first << "," << iter->second << ">" << endl;
-
+	Map::mapped_t& Map::operator [] (const Map::key_t& key) {
+		Map::MapIterator iter = find(key);
         if(iter != end()) return iter->second;		// return found pair	
+		Map::Pair pair = Pair(key,Map::mapped_t()); // create default pair to search for key
         insert(pair);								// or insert new pair	
         return find(pair)->second;
 	}
 
+	const Map::mapped_t& Map::operator [] (const Map::key_t& key) const {
+		Map::MapIterator iter = findReadOnly(key);
+		return iter != end() ? iter->second : M_NOT_IN_MAP;				
+	}
+
 	void Map::operator = (Map& map) {
+
 	}
 
 	// miscellaneous 
@@ -76,7 +79,7 @@ namespace MyDate {
 		return m_root ? Map::MapIterator(this, m_root->findFirst()) : Map::MapIterator(this, 0);
     }
 
-    Map::MapIterator Map::end(){
+    Map::MapIterator Map::end() const {
         return Map::MapIterator(this, 0);
     }
 
