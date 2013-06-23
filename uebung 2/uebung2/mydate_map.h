@@ -35,14 +35,14 @@ namespace MyDate {
 			}
 			Pair& value() { return m_pair; }
 
-			Node* find(const Pair&value) {
-				if((*m_order)(m_pair, value)) return m_right ? m_right->find(value) : 0;		// larger value: try right         
-				else if((*m_order)(value, m_pair)) return m_left ? m_left->find(value) : 0;		// smaller value: try left
+			Node* find(const Pair& pair) {
+				if((*m_order)(m_pair, pair)) return m_right ? m_right->find(pair) : 0;			// larger value: try right         
+				else if((*m_order)(pair, m_pair)) return m_left ? m_left->find(pair) : 0;		// smaller value: try left
 				else return this;																// equal value
 			}
 			Node* find(const key_t& key) {
 				if(m_pair.first < key) return m_right ? m_right->find(key) : 0;					         
-				else if(key <m_pair.first) return m_left ? m_left->find(key) : 0;				
+				else if(key < m_pair.first) return m_left ? m_left->find(key) : 0;				
 				else return this;	
 			}
 			Node* find(const mapped_t& value) {
@@ -110,12 +110,14 @@ namespace MyDate {
 		// setters
 		MapIterator insert(key_t& key, mapped_t& value);
 		MapIterator insert(const Pair& pair); // if there is a key with that value, if not overwrite existing key with new value
+		MapIterator insert(key_t& key);
 
 		// basic functions
 		MapIterator find(const key_t& key);
 		MapIterator find(const mapped_t& value);
 		MapIterator find(const Pair& pair);
 		const MapIterator findReadOnly(const Map::key_t& key) const;
+		bool Map::isEmpty() const;
 		bool contains(const key_t& key) const;
 
 		// operators

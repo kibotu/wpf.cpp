@@ -21,8 +21,8 @@ namespace MyDate {
 		unsigned int mValue;
 	public:
 		UnsignedIntValue (const int value = 0) : mValue((const unsigned int)value) { }
-		unsigned int value() const { return mValue; }
-		operator unsigned int() const { return mValue ? (int) mValue : 0; }
+		int value() const { return (int)mValue; }
+		operator int() const { return (int)mValue; }
 		UnsignedIntValue operator =(const int other) { mValue = other; return *this; }
 		bool operator ==(const UnsignedIntValue other) { return mValue == other.mValue; }
 		bool operator !=(const UnsignedIntValue other) { return mValue != other.mValue; }
@@ -70,17 +70,18 @@ namespace MyDate {
 		friend ostream& operator << (ostream &stream, Date date) { stream << date.day() << '.'<< date.month() << '.' << date.year(); return stream; }
 		bool operator == (const Date other) { return this->mDays == other.mDays && this->mMonths == other.mMonths && this->mYears == other.mYears;  }
 		bool operator != (const Date other) const { return this->mDays != other.mDays || this->mMonths != other.mMonths || this->mYears != other.mYears; }
+		const bool isValid() const { return mYears == NULL && mMonths == NULL && mDays == NULL; }
 		bool operator < (const Date other) const { 
+			//if(!isValid() || !other.isValid()) return false; 
 			return mYears < other.mYears || // years decide
-				(mYears <= other.mYears && mMonths <= other.mMonths) || // years equal -> months decide
-				(mYears <= other.mYears && mMonths <= other.mMonths && mDays < other.mDays) // years equal and months equal -> days decide
-				? true : false;
+				(mYears == other.mYears && mMonths < other.mMonths) || // years equal -> months decide
+				(mYears == other.mYears && mMonths == other.mMonths && mDays < other.mDays); // years equal and months equal -> days decide 
 		}
 		bool operator > (const Date other) const { 
+			//if(!isValid() || !other.isValid()) return false; 
 			return mYears > other.mYears || // years decide
-				(mYears >= other.mYears && mMonths > other.mMonths) || // years equal -> months decide
-				(mYears >= other.mYears && mMonths >= other.mMonths && mDays > other.mDays) // years equal and months equal -> days decide
-				? true : false;
+				(mYears == other.mYears && mMonths > other.mMonths) || // years equal -> months decide
+				(mYears == other.mYears && mMonths == other.mMonths && mDays > other.mDays); // years equal and months equal -> days decide 
 		}
 		Date operator += (const Days other) { mDays += other; normalize(); return *this; }
 		Date operator += (const Months other) { mMonths += other; normalize(); return *this; }
@@ -119,15 +120,6 @@ namespace MyDate {
 		}
 
 	private:
-
-		int getAsDays() const {
-			if(mDays && mMonths && mYears) return 0;
-			// use previous month days, except it's january then the current days count
-			const int months = mMonths == 1 ? 0 : daysInMonth(mMonths-1, mYears);
-			const int daysOfYear = isLeapYear(mYears)? 366 : 365;
-			const int years = daysOfYear * mYears;
-			return mDays + months + years;
-		}
 
 		void normalize() {
 

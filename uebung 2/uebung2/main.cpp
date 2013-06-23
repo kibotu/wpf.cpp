@@ -313,6 +313,13 @@ int main()
 
 		Map m;
 		assert(m.size() == 0); 
+		assert(m.isEmpty());
+
+		Map::Pair p1(Map::key_t(22,1,1986),"birthday");
+
+		m.insert(p1);
+		assert(m.size() != 0); 
+		assert(!m.isEmpty());
 
 		SUCCESS
 	}
@@ -327,7 +334,7 @@ int main()
 		m.insert(p1);
 		assert(m.size() == 1); 
 		
-		cout << "search by pair: " << "<" << (m.find(p1)->first) << "," << (m.find(p1)->second) << ">" << endl;
+		cout << "search by value: " << "<" << m.find(p1)->first << "," << m.find(p1)->second << ">" << endl;
 		cout << "search by value: " << "<" << m.find(s1)->first << "," << m.find(s1)->second << ">" << endl;
 		cout << "search by key: " << "<" << m.find(d1)->first << "," << m.find(d1)->second << ">" << endl;
 		assert(m.size() == 1); 
@@ -375,9 +382,9 @@ int main()
 
 		SUCCESS
 	}
-
+	
 	{
-		cout << "test: map... " << endl;
+		cout << "test: map[key] = value ... " << endl;
 
 		Map::key_t date1(1,5,2013);
 		Map::key_t date2(6,12,2013);
@@ -386,6 +393,8 @@ int main()
 		Map::mapped_t s3 = "Niko kommt doch nicht";
 
 		Map map1;
+		map1.insert(date1);
+		map1.insert(date2);
 		map1[date1] = s1;
 		map1[date2] = s2;
 		assert(map1.size() == 2);
@@ -394,7 +403,6 @@ int main()
 
 		SUCCESS
 	}
-	
 #if 0 // move this line down while your implementation proceeds...
 #endif
 

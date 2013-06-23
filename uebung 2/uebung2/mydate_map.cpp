@@ -32,6 +32,10 @@ namespace MyDate {
         return MapIterator(this, *target);
     }
 
+	Map::MapIterator Map::insert(Map::key_t& key) {
+		return insert(Pair(key,mapped_t()));
+	}
+
 	// find by key
 	Map::MapIterator Map::find(const Map::key_t& key) {
 		return MapIterator(this, m_root->find(key));
@@ -52,19 +56,26 @@ namespace MyDate {
 	}
 
 	bool Map::contains(const Map::key_t& key) const {
-		return m_root->find(key) && m_root->find(key)->m_pair.first == key;
+		return isEmpty() ? false : m_root->find(key) && m_root->find(key)->m_pair.first == key;
+	}
+
+	bool Map::isEmpty() const {
+		return m_root == 0;
 	}
 
 	// operators
 	Map::mapped_t& Map::operator [] (const Map::key_t& key) {
+		if(!this->contains(key)) {
+			Map::Pair pair = Pair(key,Map::mapped_t());		// create default pair to search for key
+			insert(pair);									// or insert new pair	
+			return find(pair)->second;
+		}
 		Map::MapIterator iter = find(key);
-        if(iter != end()) return iter->second;		// return found pair	
-		Map::Pair pair = Pair(key,Map::mapped_t()); // create default pair to search for key
-        insert(pair);								// or insert new pair	
-        return find(pair)->second;
+		if(iter != end()) return iter->second;				// return found pair	
 	}
 
 	const Map::mapped_t& Map::operator [] (const Map::key_t& key) const {
+		if(isEmpty()) return M_NOT_IN_MAP;
 		Map::MapIterator iter = findReadOnly(key);
 		return iter != end() ? iter->second : M_NOT_IN_MAP;				
 	}
