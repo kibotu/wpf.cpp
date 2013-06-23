@@ -393,8 +393,6 @@ int main()
 		Map::mapped_t s3 = "Niko kommt doch nicht";
 
 		Map map1;
-		map1.insert(date1);
-		map1.insert(date2);
 		map1[date1] = s1;
 		map1[date2] = s2;
 		assert(map1.size() == 2);
