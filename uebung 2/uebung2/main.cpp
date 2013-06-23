@@ -12,6 +12,8 @@
 #include "mydate_map.h"
 #include "order.h"
 
+std::string BoolToString(bool v) { return v ? "true" : "false"; }
+
 using namespace std;
 using namespace MyDate;
 
@@ -111,23 +113,27 @@ int main()
 		cout << "Date2: " << d2 << endl;
 		Date d3(28, 2, 2013);
 		cout << "Date3: " << d3 << endl;
-		cout << "Date2 == Date3: " << (d2==d3) << endl;
+		Date d5(28, 2, 2013);
+		cout << "Date5: " << d5 << endl;
+		cout << "Date2 == Date3: " << BoolToString(d2==d3) << endl;
 		assert(! (d2 == d3));
-		cout << "Date2 != Date3: " << (d2!=d3) << endl;
+		cout << "Date3 == Date5: " << BoolToString(d3==d5) << endl;
+		assert(d3 == d5);
+		cout << "Date2 != Date3: " << BoolToString(d2!=d3) << endl;
 		assert(d2 != d3);
-		cout << "Date2 < Date3: " << (d2<d3) << endl;
+		cout << "Date2 < Date3: " << BoolToString(d2<d3) << endl;
 		assert(d2<d3);
-		cout << "Date3 > Date3: " << (!(d3<d2)) << endl;
+		cout << "Date3 !< Date2: " << BoolToString(!(d3<d2)) << endl;
 		assert(!(d3<d2));
 
 		Date d4(29,2,2012);
 		cout << "Date4: " << d4 << endl;
-		cout << "Date4 < Date3: " << (d4<d3) << endl;
-		assert(d3<d4);
-		cout << "Date4 > Date3: " << (d4>d3) << endl;
-		assert(!(d3>d4));
-		cout << "Date4 !< Date3: " << (!(d4<d3)) << endl;
-		assert(!(d4<d3));
+		cout << "Date4 < Date3: " << BoolToString(d4<d3) << endl;
+		assert(d4<d3);
+		cout << "Date3 !< Date4: " << BoolToString(!(d3<d4)) << endl;
+		assert(!(d3<d4));
+		cout << "Date4 > Date3: " << BoolToString(d4>d3) << endl;
+		assert(d3>d4);
 
 		SUCCESS
 	}
@@ -275,11 +281,10 @@ int main()
 	{
 		cout << "test: pair... " << endl;
 
-		Pair<int,float> i_f(2,3.14f);
-		Pair<int,float> i_f2(4,3.14f);
-		Pair<string,string> s_s("Hello","World!");
-		cout << i_f << " " << s_s << endl;
-
+		Map::Pair p1(Date(1,1,1),"first");
+		Map::Pair p2(Date(22,6,2013),"second");
+		cout << '<' << p1.first  << ',' << p1.second << '>' << endl;
+		cout << '<' << p2.first  << ',' << p2.second << '>' << endl;
 		SUCCESS
 	}
 
@@ -302,51 +307,103 @@ int main()
 
 		SUCCESS
 	}
+	
+	{ 
+		cout << "test: empty map... " << endl;
+
+		Map m;
+		assert(m.size() == 0); 
+		assert(m.isEmpty());
+
+		Map::Pair p1(Map::key_t(22,1,1986),"birthday");
+
+		m.insert(p1);
+		assert(m.size() != 0); 
+		assert(!m.isEmpty());
+
+		SUCCESS
+	}
+
+	{ 
+		cout << "test: [] operator... " << endl;
+		Map::key_t d1 = Map::key_t(22,1,1986);
+		Map::mapped_t s1 = "birthday";
+		Map::Pair p1(d1,s1);
+		Map m;
+
+		m.insert(p1);
+		assert(m.size() == 1); 
+		
+		cout << "search by value: " << "<" << m.find(p1)->first << "," << m.find(p1)->second << ">" << endl;
+		cout << "search by value: " << "<" << m.find(s1)->first << "," << m.find(s1)->second << ">" << endl;
+		cout << "search by key: " << "<" << m.find(d1)->first << "," << m.find(d1)->second << ">" << endl;
+		assert(m.size() == 1); 
+
+		Map::mapped_t value = m[d1]; 
+		cout << "[" << d1 << "] = " << value << endl;
+		assert(m.size() == 1); 
+
+		SUCCESS
+	}
 
 	{
 		cout << "test: map... " << endl;
 
-		Map::pair p42(Date(1,5,2013),"Static");
-		Map::pair p3(Date(6,12,2013),"Enum");
-		Map::pair p1(Date(1,12,2013),"Dynamic");
-		Map::pair p7(Date(7,12,2013),"Cast");
+		Map::Pair p42(Date(1,5,2013),"Static");
+		Map::Pair p1(Date(1,12,2013),"Dynamic");
+		Map::Pair p3(Date(6,12,2013),"Enum");
+		Map::Pair p7(Date(7,12,2013),"Cast");
 
 		Map m;
 
 		// insert pairs of (key,value)
 		m.insert(p42);
 		m.insert(p7);
+
+		cout << "test: contains... " << endl;
+
+		assert(m.contains(p42.first));
+		assert(m.contains(p7.first));
+		assert(!m.contains(p1.first));
+		assert(!m.contains(p3.first));
+
+		SUCCESS
+
 		cout << "map 42-7: ";
 		assert(m.size() == 2);
 
 		Map::mapped_t value;
 
 		 // test finding elements via operator()
-		cout << "find 42 in map: " << (value=m[p42.first()]) << endl;
-		assert(value == p42.second());
-		cout << "find 3 in map: " << (value=m[p3.first()]) << endl;
+		cout << "find 42 in map: " << (value=m[p42.first]) << endl;
+		assert(value == p42.second);
+		cout << "find 3 in map: " << (value=m[p3.first]) << endl;
 		assert(value == string());
 
 		SUCCESS
 	}
-
-#if 0 // move this line down while your implementation proceeds...
-
+	
 	{
-		cout << "test: map... " << endl;
+		cout << "test: map[key] = value ... " << endl;
 
-		Date date1(1,5,2013);
-		Date date2(6,12,2013);
+		Map::key_t date1(1,5,2013);
+		Map::key_t date2(6,12,2013);
+		Map::mapped_t s1 = "Wenig Arbeit, viele Demos";
+		Map::mapped_t s2 = "Nikolaus kommt";
+		Map::mapped_t s3 = "Niko kommt doch nicht";
+
 		Map map1;
-		map1[date1] = "Wenig Arbeit, viele Demos";
-		map1[date2] = "Nikolaus kommt";
+		map1.insert(date1);
+		map1.insert(date2);
+		map1[date1] = s1;
+		map1[date2] = s2;
 		assert(map1.size() == 2);
-		map1[date2] = "Niko kommt doch nicht";
+		map1[date2] = s3;
 		assert(map1.size() == 2);
 
 		SUCCESS
 	}
-
+#if 0 // move this line down while your implementation proceeds...
 #endif
 
 	cout << "all tests completed." << endl;
@@ -355,4 +412,3 @@ int main()
 
 	return 0;
 }
-
