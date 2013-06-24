@@ -18,9 +18,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mydate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="mydate_map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -33,6 +30,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="mydate_map.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="map.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

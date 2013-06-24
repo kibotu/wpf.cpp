@@ -11,8 +11,13 @@
 #include "mydate.h"
 #include "mydate_map.h"
 #include "order.h"
+#include "map.h"
 
 std::string BoolToString(bool v) { return v ? "true" : "false"; }
+template<typename T1, typename T2>
+void assertEqual(T1 &t1, T2 &t2) { assert(t1 == t2); }
+template<typename T1, typename T2>
+void assertNotEqual(T1 &t1, T2 &t2) { assert(t1 != t2); }
 
 using namespace std;
 using namespace MyDate;
@@ -22,6 +27,12 @@ using namespace MyDate;
 int main()
 {
 	cout << "Starting Unit Tests for Day, Month, Year, Date...\n" << endl;
+
+	/*
+	* ##############
+	*	DAYS	   #
+	* ##############
+	*/
 
 	{
 		cout << "test: typesafety... " ;
@@ -44,6 +55,12 @@ int main()
 
 		SUCCESS
 	}
+
+	/*
+	* ##############
+	*	DATE	   #
+	* ##############
+	*/
 
 	{
 		cout << "test: leap year... " << endl;
@@ -278,6 +295,12 @@ int main()
 		SUCCESS
 	}
 
+	/*
+	* ##############
+	*	PAIR	   #
+	* ##############
+	*/
+
 	{
 		cout << "test: pair... " << endl;
 
@@ -287,6 +310,12 @@ int main()
 		cout << '<' << p2.first  << ',' << p2.second << '>' << endl;
 		SUCCESS
 	}
+
+	/*
+	* ##############
+	*	ORDER      #
+	* ##############
+	*/
 
 	{ 
 		cout << "test: order... " << endl;
@@ -308,6 +337,12 @@ int main()
 		SUCCESS
 	}
 	
+	/*
+	* ##############
+	*	DATE MAP   #
+	* ##############
+	*/
+
 	{ 
 		cout << "test: empty map... " << endl;
 
@@ -417,13 +452,13 @@ int main()
 		cout << "p2: " << "<" << p2.first<< "," << map1[p2.first] << ">" << endl;
 		cout << "p3: " << "<" << p3.first << "," << map1[p3.first] << ">" << endl;
 
-		assert(p1.first == map1.find(p1.second)->first);
-		assert(p2.first == map1.find(overwritten)->first);
-		assert(p3.first == map1.find(p3.second)->first);
+		assertEqual(p1.first, map1.find(p1.second)->first);
+		assertEqual(p2.first, map1.find(overwritten)->first);
+		assertEqual(p3.first, map1.find(p3.second)->first);
 		
-		assert(map1[p1.first] == p1.second);
-		assert(map1[p2.first] == overwritten);
-		assert(map1[p3.first] == p3.second);
+		assertEqual(map1[p1.first], p1.second);
+		assertEqual(map1[p2.first], overwritten);
+		assertEqual(map1[p3.first], p3.second);
 
 		cout << "const map2 = map1" << endl;
 
@@ -433,13 +468,13 @@ int main()
 		cout << "p2: " << "<" << p2.first<< "," << map2[p2.first] << ">" << endl;
 		cout << "p3: " << "<" << p3.first << "," << map2[p3.first] << ">" << endl;
 
-		assert(p1.first == map2.find(p1.second)->first);
-		assert(p2.first == map2.find(overwritten)->first);
-		assert(p3.first == map2.find(p3.second)->first);
+		assertEqual(p1.first, map2.find(p1.second)->first);
+		assertEqual(p2.first, map2.find(overwritten)->first);
+		assertEqual(p3.first, map2.find(p3.second)->first);
 		
-		assert(map2[p1.first] == p1.second);
-		assert(map2[p2.first] == overwritten);
-		assert(map2[p3.first] == p3.second);
+		assertEqual(map2[p1.first], p1.second);
+		assertEqual(map2[p2.first], overwritten);
+		assertEqual(map2[p3.first], p3.second);
 
 		// not working, because map2 is const
 		// map2[p2.first] = p2.second; 
@@ -447,6 +482,24 @@ int main()
 
 		SUCCESS
 	}
+	
+	/*
+	* #######################
+	*	MAP<Date, String>   #
+	* #######################
+	*/
+
+	using namespace MyMap;
+
+	{ 
+		cout << "test: map<Date, std::string> ... " << endl;
+
+
+
+
+		SUCCESS
+	}
+
 #if 0 // move this line down while your implementation proceeds...
 #endif
 

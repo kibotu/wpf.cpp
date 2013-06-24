@@ -72,13 +72,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="mydate.cpp" />
     <ClCompile Include="mydate_map.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="map.h" />
     <ClInclude Include="mydate.h" />
     <ClInclude Include="mydate_map.h" />
     <ClInclude Include="order.h" />
+    <ClInclude Include="tree.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
