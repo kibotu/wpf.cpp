@@ -37,17 +37,17 @@ namespace MyDate {
 	}
 
 	// find by key
-	Map::MapIterator Map::find(const Map::key_t& key) {
+	Map::MapIterator Map::find(const Map::key_t& key) const {
 		return MapIterator(this, m_root->find(key));
 	}
 
 	// find by value
-	Map::MapIterator Map::find(const Map::mapped_t& value) {
+	Map::MapIterator Map::find(const Map::mapped_t& value) const {
 		return MapIterator(this, m_root->find(value));
 	}
 
 	// find pair
-	Map::MapIterator Map::find(const Map::Pair& pair) {
+	Map::MapIterator Map::find(const Map::Pair& pair) const {
 		return MapIterator(this, m_root->find(pair));
     }
 
@@ -65,13 +65,13 @@ namespace MyDate {
 
 	// operators
 	Map::mapped_t& Map::operator [] (const Map::key_t& key) {
-		if(!this->contains(key)) {
-			Map::Pair pair = Pair(key,Map::mapped_t());		// create default pair to search for key
-			insert(pair);									// or insert new pair	
-			return find(pair)->second;
+		if(this->contains(key)) {
+			Map::MapIterator iter = find(key);
+			if(iter != end()) return iter->second;		// return found pair	
 		}
-		Map::MapIterator iter = find(key);
-		if(iter != end()) return iter->second;				// return found pair	
+		Map::Pair pair = Pair(key,Map::mapped_t());		// create default pair
+		insert(pair);									// and insert new pair	
+		return find(pair)->second;
 	}
 
 	const Map::mapped_t& Map::operator [] (const Map::key_t& key) const {
@@ -80,8 +80,8 @@ namespace MyDate {
 		return iter != end() ? iter->second : M_NOT_IN_MAP;				
 	}
 
-	void Map::operator = (Map& map) {
-
+	Map Map::operator = (Map& other) {
+		return Map(other);
 	}
 
 	// miscellaneous 

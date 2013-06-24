@@ -388,16 +388,62 @@ int main()
 
 		Map::key_t date1(1,5,2013);
 		Map::key_t date2(6,12,2013);
-		Map::mapped_t s1 = "Wenig Arbeit, viele Demos";
-		Map::mapped_t s2 = "Nikolaus kommt";
-		Map::mapped_t s3 = "Niko kommt doch nicht";
-
 		Map map1;
-		map1[date1] = s1;
-		map1[date2] = s2;
+		map1[date1] = "Wenig Arbeit, viele Demos";
+		map1[date2] = "Nikolaus kommt";
 		assert(map1.size() == 2);
-		map1[date2] = s3;
+		map1[date2] = "Niko kommt doch nicht";
 		assert(map1.size() == 2);
+
+		SUCCESS
+	}
+
+	{
+		cout << "test: operator = and const map ... " << endl;
+
+		Map::Pair p1(Map::key_t(1,1,1), "first date");
+		Map::Pair p2(Map::key_t(2,2,2), "second date");
+		Map::Pair p3(Map::key_t(3,3,3), "third date");
+		Map::mapped_t overwritten = "overwritten";
+		Map map1;
+
+		map1[p1.first] = p1.second;
+		map1[p2.first] = p2.second;
+		map1[p2.first] = overwritten;
+		map1[p3.first] = p3.second;
+
+		assert(map1.size() == 3);
+		cout << "p1: " << "<" << p1.first << "," << map1[p1.first] << ">" << endl;
+		cout << "p2: " << "<" << p2.first<< "," << map1[p2.first] << ">" << endl;
+		cout << "p3: " << "<" << p3.first << "," << map1[p3.first] << ">" << endl;
+
+		assert(p1.first == map1.find(p1.second)->first);
+		assert(p2.first == map1.find(overwritten)->first);
+		assert(p3.first == map1.find(p3.second)->first);
+		
+		assert(map1[p1.first] == p1.second);
+		assert(map1[p2.first] == overwritten);
+		assert(map1[p3.first] == p3.second);
+
+		cout << "const map2 = map1" << endl;
+
+		const Map map2 = map1;
+		assert(map2.size() == 3);
+		cout << "p1: " << "<" << p1.first << "," << map2[p1.first] << ">" << endl;
+		cout << "p2: " << "<" << p2.first<< "," << map2[p2.first] << ">" << endl;
+		cout << "p3: " << "<" << p3.first << "," << map2[p3.first] << ">" << endl;
+
+		assert(p1.first == map2.find(p1.second)->first);
+		assert(p2.first == map2.find(overwritten)->first);
+		assert(p3.first == map2.find(p3.second)->first);
+		
+		assert(map2[p1.first] == p1.second);
+		assert(map2[p2.first] == overwritten);
+		assert(map2[p3.first] == p3.second);
+
+		// not working, because map2 is const
+		// map2[p2.first] = p2.second; 
+		// map2.insert(p2);
 
 		SUCCESS
 	}

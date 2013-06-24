@@ -28,11 +28,8 @@ namespace MyDate {
 
 			explicit Node(const Pair &pair, order_t *order = &order_t(), Node *parent = 0) : m_pair(pair), m_order(order), m_left(0), m_right(0), m_up(parent) { }
 			explicit Node(const key_t &key, const mapped_t &value, order_t *order = &order_t(), Node *parent = 0) : m_pair(Pair(key,value)), m_order(order), m_left(0), m_right(0), m_up(parent) { }
-			~Node() { 
-				/*if(m_up) delete m_up;
-				if(m_left) delete m_left;
-				if(m_right) delete m_right;*/
-			}
+			explicit Node(const Node *other) : m_pair(other->m_pair), m_order(other->m_order), m_left(other->m_left), m_right(other->m_right), m_up(other->m_up) { }
+			~Node() { /*cout << "delete: "  << "<" << m_pair.first << "," << m_pair.second << ">" << endl;*/ }
 			Pair& value() { return m_pair; }
 
 			Node* find(const Pair& pair) {
@@ -52,7 +49,13 @@ namespace MyDate {
 			}
 			Node* insert(const key_t& key, const mapped_t& value) { }
 			Node* findFirst(){ return m_left == 0 ? this : m_left->findFirst(); }				// leftmost node
-			Node* findLast(){ return m_right == 0 ? this : m_right->findFirst(); }				// rightmost node             
+			Node* findLast(){ return m_right == 0 ? this : m_right->findFirst(); }				// rightmost node 
+			Node* clone(Node* parent) {
+				Node* n = new Node(m_pair, m_order, parent);
+				n->m_left = m_left ? m_left->clone(n) : 0;
+				n->m_right = m_right ? m_right->clone(n) : 0;
+				return n;
+			}
 		};
 		
 		class MapIterator {
@@ -101,7 +104,8 @@ namespace MyDate {
 
 		// con-/destructor
 		Map():m_root(0),m_size(0),M_NOT_IN_MAP(mapped_t()), m_order(order_t()) {}
-		~Map() { if(m_root != 0) { delete(m_root); } }
+		Map(const Map &other):m_root(other.m_root->clone(0)),m_size(other.m_size),M_NOT_IN_MAP(mapped_t()), m_order(other.m_order) {}
+		~Map() { clear(); }
 
 		// getters
 		Node* getRootNode();
@@ -113,23 +117,34 @@ namespace MyDate {
 		MapIterator insert(key_t& key);
 
 		// basic functions
-		MapIterator find(const key_t& key);
-		MapIterator find(const mapped_t& value);
-		MapIterator find(const Pair& pair);
+		MapIterator find(const key_t& key) const;
+		MapIterator find(const mapped_t& value) const;
+		MapIterator find(const Pair& pair) const;
 		const MapIterator findReadOnly(const Map::key_t& key) const;
 		bool Map::isEmpty() const;
 		bool contains(const key_t& key) const;
+		void clear() { deleteMap(m_root); m_root = 0; }
 
 		// operators
 		mapped_t& operator [] (const key_t& key);
 		const mapped_t& operator [] (const key_t& key) const;
-		void operator = (Map& map);
+		Map operator = (Map& other);
 
 		// miscellaneous 
 		MapIterator begin();
         MapIterator end() const;
         MapIterator first();
         MapIterator last();
+
+		private: 
+
+			void deleteMap(Node *n) {
+				if (n) {
+					if(n->m_left) deleteMap(n->m_left);
+					if(n->m_right) deleteMap(n->m_right);
+					delete n;
+				}
+			}
 	};
 }
 

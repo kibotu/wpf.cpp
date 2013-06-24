@@ -70,15 +70,15 @@ namespace MyDate {
 		friend ostream& operator << (ostream &stream, Date date) { stream << date.day() << '.'<< date.month() << '.' << date.year(); return stream; }
 		bool operator == (const Date other) { return this->mDays == other.mDays && this->mMonths == other.mMonths && this->mYears == other.mYears;  }
 		bool operator != (const Date other) const { return this->mDays != other.mDays || this->mMonths != other.mMonths || this->mYears != other.mYears; }
-		const bool isValid() const { return mYears == NULL && mMonths == NULL && mDays == NULL; }
+		const bool isValid() const { return mYears != NULL && mMonths != NULL && mDays != NULL; }
 		bool operator < (const Date other) const { 
-			//if(!isValid() || !other.isValid()) return false; 
+			if(!isValid() || !other.isValid()) return false; 
 			return mYears < other.mYears || // years decide
 				(mYears == other.mYears && mMonths < other.mMonths) || // years equal -> months decide
 				(mYears == other.mYears && mMonths == other.mMonths && mDays < other.mDays); // years equal and months equal -> days decide 
 		}
 		bool operator > (const Date other) const { 
-			//if(!isValid() || !other.isValid()) return false; 
+			if(!isValid() || !other.isValid()) return false; 
 			return mYears > other.mYears || // years decide
 				(mYears == other.mYears && mMonths > other.mMonths) || // years equal -> months decide
 				(mYears == other.mYears && mMonths == other.mMonths && mDays > other.mDays); // years equal and months equal -> days decide 
